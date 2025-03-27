@@ -32,26 +32,43 @@ public class ClientServiceImpl implements ClientService {
         .then();
   }
 
+  /**
+   * Save {@link Client} only, in case the Person doesn't exist
+   *
+   * @param clientDto with the information from the Client.
+   * @param personDB to add the Person ID to the Client.
+   * @return a Mono containing the saved Client.
+   */
   private Mono<Client> saveClient(ClientDto clientDto, Person personDB) {
-    Client client = mapClient(clientDto, personDB);
-
     return clientRepository
-        .save(client)
+        .save(mapClient(clientDto, personDB.getId()))
         .onErrorResume(
             DuplicateKeyException.class,
             e -> Mono.error(new DuplicateEntityException("Client already exists.")));
   }
 
+  /**
+   * Save {@link Client} and {@link Person}, when this last one doesn't exist.
+   *
+   * @param clientDto with the information from the Client.
+   * @return a Mono containing the saved Client.
+   */
   private Mono<Client> savePersonAndClient(ClientDto clientDto) {
-    Person person = PersonMapper.dtoToPerson(clientDto);
     return personRepository
-        .save(person)
-        .flatMap(personDB -> clientRepository.save(mapClient(clientDto, personDB)));
+        .save(PersonMapper.dtoToPerson(clientDto))
+        .flatMap(personDB -> this.saveClient(clientDto, personDB));
   }
 
-  private Client mapClient(ClientDto clientDto, Person person) {
+  /**
+   * Create the {@link Client} instance to be saved.
+   *
+   * @param clientDto with the information from the Client.
+   * @param personId to relate the Client.
+   * @return The Client entity to be saved.
+   */
+  private Client mapClient(ClientDto clientDto, Long personId) {
     Client client = PersonMapper.dtoToClient(clientDto);
-    client.setPersonId(person.getId());
+    client.setPersonId(personId);
 
     return client;
   }
