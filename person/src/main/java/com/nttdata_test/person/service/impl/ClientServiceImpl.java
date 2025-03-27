@@ -39,10 +39,12 @@ public class ClientServiceImpl implements ClientService {
         .findByClientId(clientId)
         .flatMap(
             client ->
-                personRepository
-                    .findById(client.getPersonId())
-                    .map(person -> PersonMapper.clientDto(person, client))
-                    .switchIfEmpty(Mono.empty()))
+                client.getStatus()
+                    ? personRepository
+                        .findById(client.getPersonId())
+                        .map(person -> PersonMapper.clientDto(person, client))
+                        .switchIfEmpty(Mono.empty())
+                    : Mono.empty())
         .switchIfEmpty(Mono.error(new EntityNotFoundException("Client not found.")));
   }
 
