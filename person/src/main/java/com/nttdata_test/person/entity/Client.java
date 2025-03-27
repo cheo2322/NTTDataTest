@@ -1,11 +1,15 @@
 package com.nttdata_test.person.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
 
 @Entity
 @Getter
@@ -19,7 +23,7 @@ public class Client {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(nullable = false, unique = true)
+  @Column(name = "client_id", nullable = false, unique = true)
   private String clientId;
 
   @Column(nullable = false)
@@ -28,7 +32,6 @@ public class Client {
   @Column(nullable = false)
   private Boolean status;
 
-  @OneToOne
-  @JoinColumn(name = "person_id", nullable = false)
-  private Person person;
+  @Column(name = "person_id", nullable = false, unique = true)
+  private Long personId;
 }
