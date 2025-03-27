@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS person (
     name VARCHAR(100) NOT NULL,
     gender VARCHAR(50),
     age INT,
-    identification VARCHAR(50),
+    identification VARCHAR(10),
     address VARCHAR(200),
     phone_number VARCHAR(20)
 );
