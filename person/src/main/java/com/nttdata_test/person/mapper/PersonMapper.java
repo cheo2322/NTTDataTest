@@ -25,4 +25,17 @@ public class PersonMapper {
         .status(clientDto.status())
         .build();
   }
+
+  public static ClientDto clientDto(Person person, Client client) {
+    return new ClientDto(
+        person.getName(),
+        person.getGender().name(),
+        person.getAge(),
+        person.getIdentification(),
+        person.getAddress(),
+        person.getPhoneNumber(),
+        client.getClientId(),
+        null,
+        client.getStatus());
+  }
 }

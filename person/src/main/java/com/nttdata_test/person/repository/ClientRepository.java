@@ -8,5 +8,5 @@ import reactor.core.publisher.Mono;
 @Repository
 public interface ClientRepository extends ReactiveCrudRepository<Client, Long> {
 
-  Mono<Client> findByPersonId(Long personId);
+  Mono<Client> findByClientId(String clientID);
 }

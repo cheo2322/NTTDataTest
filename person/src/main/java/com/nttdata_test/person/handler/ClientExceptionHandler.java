@@ -1,6 +1,7 @@
 package com.nttdata_test.person.handler;
 
 import com.nttdata_test.person.handler.ex.DuplicateEntityException;
+import com.nttdata_test.person.handler.ex.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -11,10 +12,19 @@ import reactor.core.publisher.Mono;
 public class ClientExceptionHandler {
 
   @ExceptionHandler(DuplicateEntityException.class)
-  public Mono<ResponseEntity<ClientError>> handleCustomException(DuplicateEntityException ex) {
+  public Mono<ResponseEntity<ClientError>> handleDuplicateEntityException(
+      DuplicateEntityException ex) {
     return Mono.just(
         ResponseEntity.status(HttpStatus.BAD_REQUEST)
             .body(new ClientError(HttpStatus.BAD_REQUEST.value(), ex.getMessage())));
+  }
+
+  @ExceptionHandler(EntityNotFoundException.class)
+  public Mono<ResponseEntity<ClientError>> handleEntityNotFoundException(
+      EntityNotFoundException ex) {
+    return Mono.just(
+        ResponseEntity.status(HttpStatus.NOT_FOUND)
+            .body(new ClientError(HttpStatus.NOT_FOUND.value(), ex.getMessage())));
   }
 
   @ExceptionHandler(Exception.class)
