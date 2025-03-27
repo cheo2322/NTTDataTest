@@ -3,15 +3,7 @@ package com.nttdata_test.person.controller;
 import com.nttdata_test.person.entity.dto.ClientDto;
 import com.nttdata_test.person.service.ClientService;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -36,9 +28,9 @@ public class ClientController {
     return clientService.getClient(clientId);
   }
 
-  @PutMapping("/{clientId}")
+  @PatchMapping("/{clientId}")
   @ResponseStatus(HttpStatus.OK)
-  public Mono<Void> updateClient(@PathVariable Long clientId, @RequestBody ClientDto clientDto) {
+  public Mono<Void> updateClient(@PathVariable String clientId, @RequestBody ClientDto clientDto) {
     return clientService.updateClient(clientId, clientDto);
   }
 

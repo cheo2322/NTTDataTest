@@ -29,7 +29,7 @@ public interface ClientService {
    * @param clientDto with the Client's new information.
    * @return a void response.
    */
-  Mono<Void> updateClient(Long clientId, ClientDto clientDto);
+  Mono<Void> updateClient(String clientId, ClientDto clientDto);
 
   /**
    * Deactivate a Client.

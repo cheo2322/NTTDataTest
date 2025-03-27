@@ -9,6 +9,7 @@ import com.nttdata_test.person.mapper.PersonMapper;
 import com.nttdata_test.person.repository.ClientRepository;
 import com.nttdata_test.person.repository.PersonRepository;
 import com.nttdata_test.person.service.ClientService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -49,8 +50,13 @@ public class ClientServiceImpl implements ClientService {
   }
 
   @Override
-  public Mono<Void> updateClient(Long clientId, ClientDto clientDto) {
-    return null;
+  public Mono<Void> updateClient(String clientId, ClientDto clientDto) {
+    return clientRepository
+        .findByClientId(clientId)
+        .flatMap(
+            client -> client.getStatus() ? checkPersonAndUpdate(clientDto, client) : Mono.empty())
+        .switchIfEmpty(Mono.error(new EntityNotFoundException("Client not found.")))
+        .then();
   }
 
   @Override
@@ -97,5 +103,44 @@ public class ClientServiceImpl implements ClientService {
     client.setPersonId(personId);
 
     return client;
+  }
+
+  /**
+   * Check the existence of the {@link Person} related with the {@link Client} and update them.
+   *
+   * @param clientDto with the information from the Client and Person
+   * @param client to be updated.
+   * @return The saved Client is the Person exists, otherwise return Mono.empty().
+   */
+  private Mono<Client> checkPersonAndUpdate(ClientDto clientDto, Client client) {
+    return personRepository
+        .findById(client.getPersonId())
+        .flatMap(
+            person -> {
+              if (!StringUtils.isBlank(clientDto.clientId())) {
+                client.setClientId(clientDto.clientId());
+              }
+
+              if (!StringUtils.isBlank(clientDto.password())) {
+                client.setPassword(clientDto.password());
+              }
+
+              if (clientDto.status() != null) {
+                client.setStatus(clientDto.status());
+              }
+
+              if (!StringUtils.isBlank(clientDto.address())) {
+                person.setAddress(clientDto.address());
+              }
+
+              if (!StringUtils.isBlank(clientDto.phoneNumber())) {
+                person.setPhoneNumber(clientDto.phoneNumber());
+              }
+
+              return personRepository
+                  .save(person)
+                  .flatMap(personDB -> clientRepository.save(client));
+            })
+        .switchIfEmpty(Mono.empty());
   }
 }
