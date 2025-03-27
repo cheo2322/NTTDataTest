@@ -1,5 +1,6 @@
 package com.nttdata_test.person.entity;
 
+import com.nttdata_test.person.entity.dto.Gender;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,7 +20,7 @@ public class Person {
 
   private String name;
 
-  private String gender;
+  private Gender gender;
 
   private Integer age;
 
