@@ -60,8 +60,12 @@ public class ClientServiceImpl implements ClientService {
   }
 
   @Override
-  public Mono<Void> deleteClient(Long clientId) {
-    return null;
+  public Mono<Void> deleteClient(String clientId) {
+    return clientRepository
+        .findByClientId(clientId)
+        .flatMap(client -> client.getStatus() ? deactivateClient(client) : Mono.empty())
+        .switchIfEmpty(Mono.error(new EntityNotFoundException("Client not found.")))
+        .then();
   }
 
   /**
@@ -142,5 +146,17 @@ public class ClientServiceImpl implements ClientService {
                   .flatMap(personDB -> clientRepository.save(client));
             })
         .switchIfEmpty(Mono.empty());
+  }
+
+  /**
+   * Set the {@link Client#getStatus()} to false.
+   *
+   * @param client to be deactivated.
+   * @return the updated Client.
+   */
+  private Mono<Client> deactivateClient(Client client) {
+    client.setStatus(false);
+
+    return clientRepository.save(client);
   }
 }

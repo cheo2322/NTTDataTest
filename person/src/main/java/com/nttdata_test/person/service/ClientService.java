@@ -37,5 +37,5 @@ public interface ClientService {
    * @param clientId to find the Client
    * @return a void response.
    */
-  Mono<Void> deleteClient(Long clientId);
+  Mono<Void> deleteClient(String clientId);
 }
