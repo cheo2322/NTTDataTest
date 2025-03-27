@@ -26,7 +26,7 @@ public class PersonMapper {
         .build();
   }
 
-  public static ClientDto clientDto(Person person, Client client) {
+  public static ClientDto clientToDto(Person person, Client client) {
     return new ClientDto(
         person.getName(),
         person.getGender().name(),

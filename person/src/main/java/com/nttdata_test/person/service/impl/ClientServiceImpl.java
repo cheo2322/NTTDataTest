@@ -43,7 +43,7 @@ public class ClientServiceImpl implements ClientService {
                 client.getStatus()
                     ? personRepository
                         .findById(client.getPersonId())
-                        .map(person -> PersonMapper.clientDto(person, client))
+                        .map(person -> PersonMapper.clientToDto(person, client))
                         .switchIfEmpty(Mono.empty())
                     : Mono.empty())
         .switchIfEmpty(Mono.error(new EntityNotFoundException("Client not found.")));
