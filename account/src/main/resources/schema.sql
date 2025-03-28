@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS account (
     account_type VARCHAR(50) NOT NULL,
     initial_balance DECIMAL(10, 2) NOT NULL,
     status BOOLEAN NOT NULL,
-    client_id BIGINT UNIQUE NOT NULL
+    client_id BIGINT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS movement (
