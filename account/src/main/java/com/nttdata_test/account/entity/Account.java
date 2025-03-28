@@ -18,15 +18,18 @@ public class Account {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(nullable = false, length = 6)
+  @Column(name = "account_number", nullable = false, length = 6, unique = true)
   private String accountNumber;
 
-  @Column(nullable = false)
+  @Column(name = "account_type", nullable = false)
   private AccountType accountType;
 
-  @Column(nullable = false)
+  @Column(name = "initial_balance", nullable = false)
   private Double initialBalance;
 
   @Column(nullable = false)
   private Boolean status;
+
+  @Column(name = "client_id", nullable = false)
+  private Long clientId;
 }
