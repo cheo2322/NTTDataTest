@@ -10,10 +10,10 @@ public interface ReportService {
   /**
    * Get an account status specifying a date range and a client.
    *
-   * @param id Client ID.
+   * @param clientId Client ID.
    * @param start date to filter.
    * @param end date to filter.
    * @return a Flux with all accounts and movements into the date range.
    */
-  Flux<ReportDto> getReport(Long id, LocalDate start, LocalDate end);
+  Flux<ReportDto> getReport(String clientId, LocalDate start, LocalDate end);
 }

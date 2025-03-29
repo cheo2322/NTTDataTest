@@ -24,7 +24,7 @@ public class ReportController {
   @GetMapping
   @ResponseStatus(HttpStatus.OK)
   public Flux<ReportDto> getReport(
-      @RequestParam Long id, @RequestParam LocalDate start, @RequestParam LocalDate end) {
-    return reportService.getReport(id, start, end);
+      @RequestParam String clientId, @RequestParam LocalDate start, @RequestParam LocalDate end) {
+    return reportService.getReport(clientId, start, end);
   }
 }

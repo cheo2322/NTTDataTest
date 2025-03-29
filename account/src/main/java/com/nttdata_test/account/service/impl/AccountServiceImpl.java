@@ -37,20 +37,15 @@ public class AccountServiceImpl implements AccountService {
     return clientWebClient
         .getClient(accountDto.clientId())
         .flatMap(
-            client -> {
-              if (client == null || !Objects.equals(client.clientId(), accountDto.clientId())) {
-                return Mono.error(new EntityNotFoundException("Client not found."));
-              }
-
-              return accountRepository
-                  .save(AccountMapper.dtoToAccount(accountDto))
-                  .flatMap(this::saveFirstMovement)
-                  .onErrorResume(
-                      DuplicateKeyException.class,
-                      e ->
-                          Mono.error(
-                              new DuplicateEntityException("Account number already exists.")));
-            })
+            client ->
+                accountRepository
+                    .save(AccountMapper.dtoToAccount(accountDto))
+                    .flatMap(this::saveFirstMovement)
+                    .onErrorResume(
+                        DuplicateKeyException.class,
+                        e ->
+                            Mono.error(
+                                new DuplicateEntityException("Account number already exists."))))
         .then();
   }
 
