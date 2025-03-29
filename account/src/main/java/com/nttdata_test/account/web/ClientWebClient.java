@@ -13,7 +13,7 @@ public class ClientWebClient {
   private final WebClient webClient;
 
   public ClientWebClient() {
-    this.webClient = WebClient.builder().baseUrl("http://127.0.0.1:8080/nttdata/test/v1").build();
+    this.webClient = WebClient.builder().baseUrl("http://person:8080/nttdata/test/v1").build();
   }
 
   public Mono<ClientDto> getClient(String clientId) {

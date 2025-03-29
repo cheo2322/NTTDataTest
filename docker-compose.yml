@@ -1,0 +1,48 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 12345
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./BaseDatos.sql:/docker-entrypoint-initdb.d/BaseDatos.sql
+    ports:
+      - "5432:5432"
+
+  person:
+    build:
+      context: ./person
+      dockerfile: Dockerfile
+    container_name: person
+    environment:
+      NTTDATA_TEST_DB_URL: postgres-db
+      NTTDATA_TEST_DB_PORT: 5432
+      NTTDATA_TEST_DB_NAME: nttdata_test
+      NTTDATA_TEST_DB_USERNAME: postgres
+      NTTDATA_TEST_DB_PASSWORD: 12345
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+
+  account:
+    build:
+      context: ./account
+      dockerfile: Dockerfile
+    container_name: account
+    environment:
+      NTTDATA_TEST_DB_URL: postgres-db
+      NTTDATA_TEST_DB_PORT: 5432
+      NTTDATA_TEST_DB_NAME: nttdata_test
+      NTTDATA_TEST_DB_USERNAME: postgres
+      NTTDATA_TEST_DB_PASSWORD: 12345
+    ports:
+      - "8081:8080"
+    depends_on:
+      - postgres
+      - person
+
+volumes:
+  postgres-data:
