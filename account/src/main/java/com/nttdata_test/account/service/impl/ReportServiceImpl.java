@@ -57,8 +57,10 @@ public class ReportServiceImpl implements ReportService {
         .flatMap(
             accountDB ->
                 movementRepository
-                    .findByAccountIdAndDateRange(
-                        accountDB.getId(), start.atStartOfDay(), end.atTime(LocalTime.MAX))
+                    .findByAccountNumberAndDateRange(
+                        accountDB.getAccountNumber(),
+                        start.atStartOfDay(),
+                        end.atTime(LocalTime.MAX))
                     .map(
                         movementDB ->
                             ReportMapper.buildReportDto(accountDB, movementDB, clientDB)));

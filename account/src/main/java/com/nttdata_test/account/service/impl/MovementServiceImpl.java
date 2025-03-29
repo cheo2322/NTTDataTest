@@ -67,7 +67,7 @@ public class MovementServiceImpl implements MovementService {
         .switchIfEmpty(Mono.error(new EntityNotFoundException("Last movement not found.")))
         .flatMap(
             lastMovement -> {
-              double newBalance = lastMovement.getBalance() + movementDto.balance();
+              double newBalance = lastMovement.getBalance() + movementDto.value();
               return newBalance >= 0
                   ? saveMovement(movementDto, account, newBalance)
                   : Mono.error(new NegativeBalanceException("Not enough funds."));

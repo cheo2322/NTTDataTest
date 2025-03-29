@@ -17,7 +17,7 @@ public interface MovementRepository extends ReactiveCrudRepository<Movement, Lon
   Mono<Movement> findLastMovementByDate();
 
   @Query(
-      "SELECT * FROM movement WHERE account_id = :accountNumber AND movement_date BETWEEN :startDate AND :endDate")
-  Flux<Movement> findByAccountIdAndDateRange(
-      Long accountId, LocalDateTime startDate, LocalDateTime endDate);
+      "SELECT * FROM movement WHERE account_number = :accountNumber AND movement_date BETWEEN :startDate AND :endDate")
+  Flux<Movement> findByAccountNumberAndDateRange(
+      String accountNumber, LocalDateTime startDate, LocalDateTime endDate);
 }
