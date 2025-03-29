@@ -1,6 +1,7 @@
 package com.nttdata_test.account.service.impl;
 
 import com.nttdata_test.account.entity.dto.AccountDto;
+import com.nttdata_test.account.handler.ex.DuplicateEntityException;
 import com.nttdata_test.account.handler.ex.EntityNotFoundException;
 import com.nttdata_test.account.mapper.AccountMapper;
 import com.nttdata_test.account.repository.AccountRepository;
@@ -36,7 +37,9 @@ public class AccountServiceImpl implements AccountService {
                   .save(AccountMapper.dtoToAccount(accountDto))
                   .onErrorResume(
                       DuplicateKeyException.class,
-                      e -> Mono.error(new DuplicateKeyException("Account number already exists.")));
+                      e ->
+                          Mono.error(
+                              new DuplicateEntityException("Account number already exists.")));
             })
         .switchIfEmpty(Mono.error(new EntityNotFoundException("Client not found.")))
         .then();
