@@ -4,6 +4,7 @@ import com.nttdata_test.account.entity.Account;
 import com.nttdata_test.account.entity.Movement;
 import com.nttdata_test.account.entity.dto.MovementDto;
 import com.nttdata_test.account.handler.ex.EntityNotFoundException;
+import com.nttdata_test.account.handler.ex.NegativeBalanceException;
 import com.nttdata_test.account.mapper.MovementMapper;
 import com.nttdata_test.account.repository.AccountRepository;
 import com.nttdata_test.account.repository.MovementRepository;
@@ -29,7 +30,8 @@ public class MovementServiceImpl implements MovementService {
   public Mono<Void> createMovement(MovementDto movementDto) {
     return accountRepository
         .findById(movementDto.accountId())
-        .flatMap(account -> saveMovement(movementDto, account))
+        .filter(Account::getStatus)
+        .flatMap(account -> checkLastMovementAndSave(movementDto, account))
         .switchIfEmpty(Mono.error(new EntityNotFoundException("Account not found.")))
         .then();
   }
@@ -59,22 +61,29 @@ public class MovementServiceImpl implements MovementService {
    * @param account to add information to the Movement.
    * @return the saved Movement.
    */
-  private Mono<Movement> saveMovement(MovementDto movementDto, Account account) {
-    if (!account.getStatus()) {
-      return Mono.empty();
-    }
-
-    Movement movement =
-        Movement.builder()
-            .movementDate(LocalDateTime.now())
-            .accountType(account.getAccountType())
-            .movementValue(movementDto.value())
-            .balance(movementDto.balance())
-            .accountId(account.getId())
-            .build();
-
+  private Mono<Movement> checkLastMovementAndSave(MovementDto movementDto, Account account) {
     return movementRepository
-        .save(movement)
+        .findLastMovementByDate()
+        .switchIfEmpty(Mono.error(new EntityNotFoundException("Last movement not found.")))
+        .flatMap(
+            lastMovement -> {
+              double newBalance = lastMovement.getBalance() + movementDto.balance();
+              return newBalance >= 0
+                  ? saveMovement(movementDto, account, newBalance)
+                  : Mono.error(new NegativeBalanceException("Not enough funds."));
+            });
+  }
+
+  private Mono<Movement> saveMovement(MovementDto movementDto, Account account, double newBalance) {
+    return movementRepository
+        .save(
+            Movement.builder()
+                .movementDate(LocalDateTime.now())
+                .accountType(account.getAccountType())
+                .movementValue(movementDto.value())
+                .balance(newBalance)
+                .accountId(account.getId())
+                .build())
         .doOnSuccess(
             movementDB ->
                 System.out.printf(
