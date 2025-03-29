@@ -37,10 +37,19 @@ public class ReportServiceImpl implements ReportService {
         .getClient(clientId)
         .filter(ClientDto::status)
         .switchIfEmpty(Mono.error(new EntityNotFoundException("Client not found.")))
-        .flatMapMany(clientDB -> findAccountsAndGetReport(clientId, start, end, clientDB));
+        .flatMapMany(clientDB -> findAccountsAndMovements(clientId, start, end, clientDB));
   }
 
-  private Flux<ReportDto> findAccountsAndGetReport(
+  /**
+   * Find accounts and movements.
+   *
+   * @param clientId to find the accounts.
+   * @param start range of Movement.
+   * @param end range of Movement.
+   * @param clientDB to get data for the Report.
+   * @return the Report.
+   */
+  private Flux<ReportDto> findAccountsAndMovements(
       String clientId, LocalDate start, LocalDate end, ClientDto clientDB) {
     return accountRepository
         .findByClientId(clientId)
