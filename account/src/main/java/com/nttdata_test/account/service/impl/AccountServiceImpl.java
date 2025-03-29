@@ -55,11 +55,47 @@ public class AccountServiceImpl implements AccountService {
 
   @Override
   public Mono<Void> updateAccount(String accountNumber, AccountDto accountDto) {
-    return null;
+    return accountRepository
+        .findByAccountNumber(accountNumber)
+        .flatMap(
+            account -> {
+              if (!account.getStatus()) {
+                return Mono.empty();
+              }
+
+              if (accountDto.status() != null) {
+                account.setStatus(accountDto.status());
+              }
+
+              return accountRepository
+                  .save(account)
+                  .doOnSuccess(
+                      updatedAccount ->
+                          System.out.println("Updated account: " + updatedAccount.getId()))
+                  .then();
+            })
+        .switchIfEmpty(Mono.error(new EntityNotFoundException("Account not found.")));
   }
 
   @Override
   public Mono<Void> deleteAccount(String accountNumber) {
-    return null;
+    return accountRepository
+        .findByAccountNumber(accountNumber)
+        .flatMap(
+            account -> {
+              if (!account.getStatus()) {
+                return Mono.empty();
+              }
+
+              account.setStatus(false);
+
+              return accountRepository
+                  .save(account)
+                  .doOnSuccess(
+                      updatedAccount ->
+                          System.out.println("Updated account: " + updatedAccount.getId()))
+                  .then();
+            })
+        .switchIfEmpty(Mono.error(new EntityNotFoundException("Account not found.")));
   }
 }
