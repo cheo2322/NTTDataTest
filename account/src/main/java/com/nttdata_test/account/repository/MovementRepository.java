@@ -11,13 +11,13 @@ import reactor.core.publisher.Mono;
 @Repository
 public interface MovementRepository extends ReactiveCrudRepository<Movement, Long> {
 
-  Flux<Movement> findByAccountId(Long accountId);
+  Flux<Movement> findByAccountNumber(String accountNumber);
 
   @Query("SELECT * FROM movement ORDER BY movement_date DESC LIMIT 1")
   Mono<Movement> findLastMovementByDate();
 
   @Query(
-      "SELECT * FROM movement WHERE account_id = :accountId AND movement_date BETWEEN :startDate AND :endDate")
+      "SELECT * FROM movement WHERE account_id = :accountNumber AND movement_date BETWEEN :startDate AND :endDate")
   Flux<Movement> findByAccountIdAndDateRange(
       Long accountId, LocalDateTime startDate, LocalDateTime endDate);
 }

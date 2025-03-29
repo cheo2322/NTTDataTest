@@ -29,7 +29,7 @@ public class MovementServiceImpl implements MovementService {
   @Override
   public Mono<Void> createMovement(MovementDto movementDto) {
     return accountRepository
-        .findById(movementDto.accountId())
+        .findByAccountNumber(movementDto.accountNumber())
         .filter(Account::getStatus)
         .flatMap(account -> checkLastMovementAndSave(movementDto, account))
         .switchIfEmpty(Mono.error(new EntityNotFoundException("Account not found.")))
@@ -50,7 +50,7 @@ public class MovementServiceImpl implements MovementService {
         .findById(accountId)
         .filter(Account::getStatus)
         .switchIfEmpty(Mono.error(new EntityNotFoundException("Account not found .")))
-        .flatMapMany(account -> movementRepository.findByAccountId(accountId))
+        .flatMapMany(account -> movementRepository.findByAccountNumber(account.getAccountNumber()))
         .map(MovementMapper::movementToDto);
   }
 
@@ -82,7 +82,7 @@ public class MovementServiceImpl implements MovementService {
                 .accountType(account.getAccountType())
                 .movementValue(movementDto.value())
                 .balance(newBalance)
-                .accountId(account.getId())
+                .accountNumber(account.getAccountNumber())
                 .build())
         .doOnSuccess(
             movementDB ->

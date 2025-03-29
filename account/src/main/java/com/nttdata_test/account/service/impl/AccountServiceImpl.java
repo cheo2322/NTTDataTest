@@ -11,7 +11,6 @@ import com.nttdata_test.account.repository.MovementRepository;
 import com.nttdata_test.account.service.AccountService;
 import com.nttdata_test.account.web.ClientWebClient;
 import java.time.LocalDateTime;
-import java.util.Objects;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -115,7 +114,7 @@ public class AccountServiceImpl implements AccountService {
             .accountType(account.getAccountType())
             .movementValue(account.getInitialBalance())
             .balance(account.getInitialBalance())
-            .accountId(account.getId())
+            .accountNumber(account.getAccountNumber())
             .movementDate(LocalDateTime.now())
             .build();
 

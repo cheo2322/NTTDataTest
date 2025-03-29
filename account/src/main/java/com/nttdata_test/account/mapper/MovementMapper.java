@@ -7,6 +7,6 @@ public class MovementMapper {
 
   public static MovementDto movementToDto(Movement movement) {
     return new MovementDto(
-        movement.getAccountId(), movement.getMovementValue(), movement.getBalance());
+        movement.getAccountNumber(), movement.getMovementValue(), movement.getBalance());
   }
 }

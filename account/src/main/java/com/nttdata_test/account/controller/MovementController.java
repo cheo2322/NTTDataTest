@@ -34,7 +34,7 @@ public class MovementController {
     return movementService.getMovementById(id);
   }
 
-  @GetMapping("/{accountId}")
+  @GetMapping("/{accountNumber}")
   public Flux<MovementDto> getMovementsByAccountId(@PathVariable Long accountId) {
     return movementService.getMovementsByAccountId(accountId);
   }

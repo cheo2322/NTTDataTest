@@ -37,6 +37,6 @@ public class Movement {
   @Column(nullable = false)
   private Double balance;
 
-  @Column(name = "account_id", nullable = false)
-  private Long accountId;
+  @Column(name = "account_number", nullable = false)
+  private String accountNumber;
 }
