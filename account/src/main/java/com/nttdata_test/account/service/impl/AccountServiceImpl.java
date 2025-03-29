@@ -1,12 +1,16 @@
 package com.nttdata_test.account.service.impl;
 
+import com.nttdata_test.account.entity.Account;
+import com.nttdata_test.account.entity.Movement;
 import com.nttdata_test.account.entity.dto.AccountDto;
 import com.nttdata_test.account.handler.ex.DuplicateEntityException;
 import com.nttdata_test.account.handler.ex.EntityNotFoundException;
 import com.nttdata_test.account.mapper.AccountMapper;
 import com.nttdata_test.account.repository.AccountRepository;
+import com.nttdata_test.account.repository.MovementRepository;
 import com.nttdata_test.account.service.AccountService;
 import com.nttdata_test.account.web.ClientWebClient;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
@@ -16,10 +20,15 @@ import reactor.core.publisher.Mono;
 public class AccountServiceImpl implements AccountService {
 
   private final AccountRepository accountRepository;
+  private final MovementRepository movementRepository;
   private final ClientWebClient clientWebClient;
 
-  public AccountServiceImpl(AccountRepository accountRepository, ClientWebClient clientWebClient) {
+  public AccountServiceImpl(
+      AccountRepository accountRepository,
+      MovementRepository movementRepository,
+      ClientWebClient clientWebClient) {
     this.accountRepository = accountRepository;
+    this.movementRepository = movementRepository;
     this.clientWebClient = clientWebClient;
   }
 
@@ -30,18 +39,18 @@ public class AccountServiceImpl implements AccountService {
         .flatMap(
             client -> {
               if (client == null || !Objects.equals(client.clientId(), accountDto.clientId())) {
-                return Mono.empty();
+                return Mono.error(new EntityNotFoundException("Client not found."));
               }
 
               return accountRepository
                   .save(AccountMapper.dtoToAccount(accountDto))
+                  .flatMap(this::saveFirstMovement)
                   .onErrorResume(
                       DuplicateKeyException.class,
                       e ->
                           Mono.error(
                               new DuplicateEntityException("Account number already exists.")));
             })
-        .switchIfEmpty(Mono.error(new EntityNotFoundException("Client not found.")))
         .then();
   }
 
@@ -97,5 +106,26 @@ public class AccountServiceImpl implements AccountService {
                   .then();
             })
         .switchIfEmpty(Mono.error(new EntityNotFoundException("Account not found.")));
+  }
+
+  /**
+   * Save the first Movement when an Account is created.
+   *
+   * @param account to get the data for the Movement.
+   * @return the saved Movement.
+   */
+  private Mono<Movement> saveFirstMovement(Account account) {
+    Movement firstAcountMovement =
+        Movement.builder()
+            .accountType(account.getAccountType())
+            .movementValue(account.getInitialBalance())
+            .balance(account.getInitialBalance())
+            .accountId(account.getId())
+            .movementDate(LocalDateTime.now())
+            .build();
+
+    return movementRepository
+        .save(firstAcountMovement)
+        .doOnSuccess(movement -> System.out.println("First movement created: " + movement.getId()));
   }
 }
