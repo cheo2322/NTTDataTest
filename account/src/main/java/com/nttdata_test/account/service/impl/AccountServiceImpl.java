@@ -6,6 +6,7 @@ import com.nttdata_test.account.mapper.AccountMapper;
 import com.nttdata_test.account.repository.AccountRepository;
 import com.nttdata_test.account.service.AccountService;
 import com.nttdata_test.account.web.ClientWebClient;
+import java.util.Objects;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -18,26 +19,26 @@ public class AccountServiceImpl implements AccountService {
 
   public AccountServiceImpl(AccountRepository accountRepository, ClientWebClient clientWebClient) {
     this.accountRepository = accountRepository;
-      this.clientWebClient = clientWebClient;
+    this.clientWebClient = clientWebClient;
   }
 
   @Override
   public Mono<Void> createAccount(AccountDto accountDto) {
-//    clientWebClient.getClient(accountDto.clientId())
-//            .flatMap(client -> {
-//              if ( client == null || !Objects.equals(client.clientId(), accountDto.clientId())) {
-//                return Mono.empty();
-//              }
-//
-//              AccountMapper.dtoToAccount()
-//            })
-//            .switchIfEmpty(Mono.error(new EntityNotFoundException("Client not found")));
+    return clientWebClient
+        .getClient(accountDto.clientId())
+        .flatMap(
+            client -> {
+              if (client == null || !Objects.equals(client.clientId(), accountDto.clientId())) {
+                return Mono.empty();
+              }
 
-    return accountRepository
-        .save(AccountMapper.dtoToAccount(accountDto))
-        .onErrorResume(
-            DuplicateKeyException.class,
-            e -> Mono.error(new DuplicateKeyException("Account number already exists.")))
+              return accountRepository
+                  .save(AccountMapper.dtoToAccount(accountDto))
+                  .onErrorResume(
+                      DuplicateKeyException.class,
+                      e -> Mono.error(new DuplicateKeyException("Account number already exists.")));
+            })
+        .switchIfEmpty(Mono.error(new EntityNotFoundException("Client not found.")))
         .then();
   }
 

@@ -5,4 +5,4 @@ public record AccountDto(
     String accountType,
     Double initialBalance,
     Boolean status,
-    Long clientId) {}
+    String clientId) {}

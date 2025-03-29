@@ -4,10 +4,10 @@ DROP TABLE IF EXISTS account;
 CREATE TABLE IF NOT EXISTS account (
     id SERIAL PRIMARY KEY,
     account_number VARCHAR(50) UNIQUE NOT NULL,
-    account_type VARCHAR(50) NOT NULL,
+    account_type VARCHAR(8) NOT NULL,
     initial_balance DECIMAL(10, 2) NOT NULL,
     status BOOLEAN NOT NULL,
-    client_id BIGINT NOT NULL
+    client_id VARCHAR(20) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS movement (

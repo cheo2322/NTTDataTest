@@ -37,5 +37,5 @@ public class Account {
   private Boolean status;
 
   @Column(name = "client_id", nullable = false)
-  private Long clientId;
+  private String clientId;
 }

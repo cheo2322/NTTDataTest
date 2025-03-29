@@ -92,7 +92,10 @@ public class ClientServiceImpl implements ClientService {
   private Mono<Client> savePersonAndClient(ClientDto clientDto) {
     return personRepository
         .save(PersonMapper.dtoToPerson(clientDto))
-        .flatMap(personDB -> this.saveClient(clientDto, personDB));
+        .flatMap(
+            personDB ->
+                this.saveClient(clientDto, personDB)
+                    .doOnSuccess(client -> System.out.println("Saved: " + client.getId())));
   }
 
   /**
