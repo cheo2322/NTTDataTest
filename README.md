@@ -35,7 +35,7 @@ For operations, please check the Postman collection.
 
    Operation: POST Client
 
-   Endpoint: /nttdata/test/v1/clients
+   Endpoint: `/nttdata/test/v1/clients`
 
    Request body:
     ```json
@@ -56,7 +56,7 @@ For operations, please check the Postman collection.
 
    Operation: POST Account
 
-   Endpoint: nttdata/test/v1/accounts
+   Endpoint: `nttdata/test/v1/accounts`
 
    Request body:
    ```json
@@ -72,7 +72,7 @@ For operations, please check the Postman collection.
 
    Operation: POST Account
 
-   Endpoint: nttdata/test/v1/accounts
+   Endpoint: `nttdata/test/v1/accounts`
 
    Request body:
    ```json
@@ -89,7 +89,7 @@ For operations, please check the Postman collection.
 
    Operation: POST Movement
 
-   Endpoint: /nttdata/test/v1/movements
+   Endpoint: `/nttdata/test/v1/movements`
 
    Request body:
    ```json
@@ -103,7 +103,7 @@ For operations, please check the Postman collection.
 
    Operation: GET Report
 
-   Endpoint: nttdata/test/v1/reports?clientId=jlema&start=2025-03-29&end=2025-03-29
+   Endpoint: `nttdata/test/v1/reports?clientId=jlema&start=2025-03-29&end=2025-03-29`
 
    Response body:
    ```json
