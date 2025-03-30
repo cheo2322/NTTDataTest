@@ -1,5 +1,32 @@
 # NTTData Test for Senior Developer
 
+## Steps to Reproduce
+
+Please, make sure you have these tools installed in your system:
+
+- Java 17
+- Maven, or use the maven wrapper into the project. Alternatively,
+  you can use your IDE for `maven` tasks
+- Docker (In Windows OS you need to install Docker Desktop)
+
+1. Clone this repository in your local
+2. Go to the root folder
+3. Go to the person and account folders and `pacakge` the project
+   ```bash
+   cd person
+   mvn clean package
+   cd ..
+   cd account
+   mvn clean package
+   ```
+   
+4. Go to the root folder and start the docker services
+   ```bash
+   docker compose up --build -d
+   ```
+
+5. Nice job! You can start to make request to the app.
+
 ## Use Cases
 
 For operations, please check the Postman collection.

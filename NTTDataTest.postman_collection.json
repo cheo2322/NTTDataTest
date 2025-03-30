@@ -1,0 +1,436 @@
+{
+	"info": {
+		"_postman_id": "c5b301c3-499b-493a-a7c5-85f5fa462fde",
+		"name": "NTTDataTest",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30070675"
+	},
+	"item": [
+		{
+			"name": "client",
+			"item": [
+				{
+					"name": "{clientId}",
+					"item": [
+						{
+							"name": "GET Client",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/nttdata/test/v1/clients/josorio",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"nttdata",
+										"test",
+										"v1",
+										"clients",
+										"josorio"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "PATCH Client",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"clientId\": \"josorio1\",\n    \"phoneNumber\": \"0991595771\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/nttdata/test/v1/clients/josorio",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"nttdata",
+										"test",
+										"v1",
+										"clients",
+										"josorio"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Client created",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"id\": \"<long>\",\n  \"name\": \"<string>\",\n  \"gender\": \"OTHER\",\n  \"age\": \"<integer>\",\n  \"identification\": \"<string>\",\n  \"address\": \"<string>\",\n  \"phone\": \"<string>\",\n  \"clientId\": \"<string>\",\n  \"password\": \"<string>\",\n  \"status\": \"<string>\"\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/clients",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"clients"
+											]
+										}
+									},
+									"status": "Created",
+									"code": 201,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "POST Client",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Juan Osorio\",\n  \"gender\": \"MALE\",\n  \"age\": 29,\n  \"identification\": \"1234567893\",\n  \"address\": \"13 de junio y Equinoccial\",\n  \"phoneNumber\": \"098874587\",\n  \"clientId\": \"josorio\",\n  \"password\": \"1245\",\n  \"status\": \"true\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/nttdata/test/v1/clients",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"nttdata",
+								"test",
+								"v1",
+								"clients"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Client created",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"id\": \"<long>\",\n  \"name\": \"<string>\",\n  \"gender\": \"OTHER\",\n  \"age\": \"<integer>\",\n  \"identification\": \"<string>\",\n  \"address\": \"<string>\",\n  \"phone\": \"<string>\",\n  \"clientId\": \"<string>\",\n  \"password\": \"<string>\",\n  \"status\": \"<string>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/clients",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"clients"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "account",
+			"item": [
+				{
+					"name": "POST Account",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"accountNumber\": \"585545\",\n  \"accountType\": \"CHECKING\",\n  \"initialBalance\": 1000.0,\n  \"status\": true,\n  \"clientId\": \"josorio\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/nttdata/test/v1/accounts",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"nttdata",
+								"test",
+								"v1",
+								"accounts"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Cuenta creada exitosamente",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"accountNumber\": \"<string>\",\n  \"accountName\": \"<string>\",\n  \"accountType\": \"<string>\",\n  \"balance\": \"<number>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/accounts",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"accounts"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "movement",
+			"item": [
+				{
+					"name": "POST Movement",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"value\": \"-575.0\",\n  \"accountNumber\": \"585545\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/nttdata/test/v1/movements",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"nttdata",
+								"test",
+								"v1",
+								"movements"
+							]
+						},
+						"description": "Crea un movimiento asociado a una cuenta."
+					},
+					"response": [
+						{
+							"name": "Movimiento creado exitosamente.",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"movementDate\": \"<dateTime>\",\n  \"accountType\": \"<string>\",\n  \"movementValue\": \"<double>\",\n  \"balance\": \"<double>\",\n  \"accountId\": \"<integer>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										""
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						},
+						{
+							"name": "Error en la solicitud.",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"movementDate\": \"<dateTime>\",\n  \"accountType\": \"<string>\",\n  \"movementValue\": \"<double>\",\n  \"balance\": \"<double>\",\n  \"accountId\": \"<integer>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										""
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "report",
+			"item": [
+				{
+					"name": "GET Report",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "localhost:8081/nttdata/test/v1/reports?clientId=josorio&start=2025-03-29&end=2025-03-30",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"nttdata",
+								"test",
+								"v1",
+								"reports"
+							],
+							"query": [
+								{
+									"key": "clientId",
+									"value": "josorio",
+									"description": "(Required) client ID."
+								},
+								{
+									"key": "start",
+									"value": "2025-03-29",
+									"description": "(Required) Date range start (ISO 8601)."
+								},
+								{
+									"key": "end",
+									"value": "2025-03-30",
+									"description": "(Required) Date range end (ISO 8601)."
+								}
+							]
+						},
+						"description": "Devuelve los reportes de movimientos en un rango de fechas para un cliente específico."
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
