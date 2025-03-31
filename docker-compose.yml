@@ -11,6 +11,15 @@ services:
     ports:
       - "5432:5432"
 
+  maven-builder:
+    image: maven:3.9.3-eclipse-temurin-17
+    container_name: maven-builder
+    volumes:
+      - ./person/target:/person/target
+      - ./account/target:/account/target
+    working_dir: /
+    command: bash -c "cd /person && mvn clean package -DskipTests && cd .. && cd /account && mvn clean package -DskipTests"
+
   person:
     build:
       context: ./person
@@ -26,6 +35,7 @@ services:
       - "8080:8080"
     depends_on:
       - postgres
+      - maven-builder
 
   account:
     build:
@@ -43,6 +53,7 @@ services:
     depends_on:
       - postgres
       - person
+      - maven-builder
 
 volumes:
   postgres-data:
